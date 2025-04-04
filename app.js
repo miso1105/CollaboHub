@@ -1,10 +1,12 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+dotenv.config({ path: '.env.local' });
 const nunjucks = require('nunjucks');
 const { errorHandler, routerNotFound } = require('./src/middlewares/errorHandler');
+const cookiParser = require('cookie-parser');
 
-dotenv.config();
+const authRouter = require('./src/routes/auth');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -17,14 +19,14 @@ nunjucks.configure('views', {
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookiParser(process.env.COOKIE_SECRET));
 
 app.get('/', (req, res) => {
     res.send('test');
 });
+app.use('/api/v1/auth', authRouter);
 
 app.use(routerNotFound);
 app.use(errorHandler);
-
-
 
 module.exports = app;

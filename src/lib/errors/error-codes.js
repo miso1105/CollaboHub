@@ -34,7 +34,7 @@ module.exports = {
         message: '데이터베이스 연결에 실패했습니다.',
         code: 'ERR_DB_CONNECTION',
     },
-    DB_QUERY_ERRO: {
+    DB_QUERY_ERROR: {
         status: 500,
         message: 'DB 쿼리 처리 중 오류가 발생했습니다.',
         code: 'ERR_DB_QUERY',
@@ -53,5 +53,15 @@ module.exports = {
         status: 500,
         message: '소켓 연결에 실패했습니다.',
         code: 'ERR_SOCKET_CONNECTION',
+    },
+    TOKEN_EXPIRED_ERROR: {
+        status: 419,
+        message: '토큰이 만료되었습니다.',
+        code: 'ERR_TOKEN_EXPIRED',
+    },
+    INVALID_TOKEN_ERROR: {
+        status: 401,
+        message: '유효하지 않은 토큰입니다.',
+        code: 'ERR_INVALID_TOKEN',
     },
 };

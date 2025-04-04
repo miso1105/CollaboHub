@@ -19,12 +19,17 @@
   },
   "homepage": "https://github.com/miso1105/CollaboHub#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-redis": "^8.0.2",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.14.0",
-    "nunjucks": "^3.2.4"
+    "nunjucks": "^3.2.4",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "eslint": "^9.23.0",
