@@ -9,6 +9,7 @@ const pool = mysql.createPool({
 }); 
 
 const getConnection = async () => {
+    console.log('mysql 연결')
     return await pool.getConnection();
 }
 
