@@ -27,7 +27,7 @@ module.exports = {
     INTERNAL_SERVER_ERROR: {
         status: 500,
         message: '서버 내부 오류',
-        code: 'ERR_INRERNER_SERVER',
+        code: 'ERR_INTERNER_SERVER',
     },
     DB_CONNECTION_ERROR: {
         status: 503,
