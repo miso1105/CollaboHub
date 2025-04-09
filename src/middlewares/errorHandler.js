@@ -5,6 +5,7 @@ exports.errorHandler = (err, req, res, next) => {
     const message = err.message || ERROR_CODES.INTERNAL_SERVER_ERROR.message;
     const code = err.code || ERROR_CODES.INTERNAL_SERVER_ERROR.code;
 
+    // CutomError인지 체크하는 조건(클래스 내 메서드인 toJson) 
     if (typeof err.toJson === 'function') {
         return res.status(status).json(err.toJson());
     }

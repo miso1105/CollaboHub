@@ -7,6 +7,7 @@ const { errorHandler, routerNotFound } = require('./src/middlewares/errorHandler
 const cookiParser = require('cookie-parser');
 
 const authRouter = require('./src/routes/auth');
+const recruitRouter = require('./src/routes/recruit');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
     res.send('test');
 });
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/recruits', recruitRouter);
 
 app.use(routerNotFound);
 app.use(errorHandler);

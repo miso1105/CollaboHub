@@ -17,10 +17,12 @@ class CustomError extends Error {
             code: this.code,
         };
 
-        if (process.env.NODE_ENV !== 'production' && this.original) {
-            json.original = typeof this.original.stack === 'string' 
-                ? this.original.stack 
-                : this.original;
+        if (process.env.NODE_ENV !== 'production' && this.original) { 
+            if (typeof this.stack === 'string') {
+                json.original = this.original.stack.split('\n').slice(0, 3).join('\n');
+            } else {
+                json.original = this.original;
+            }
         }
         
         return json;

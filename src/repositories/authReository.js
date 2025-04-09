@@ -1,9 +1,9 @@
-const { handleDbError } = require('../lib/utils/handleDbError');
+const { handleDbError } = require('../lib/utils/db/handleDbError');
 
 exports.findUserByEmail = async (connection, email) => {
     try {
         const query = `SELECT * FROM users WHERE email = ? AND deleted_at IS NULL`;
-        const [rows] = await connection.query(query, [email]);
+        const [rows] = await connection.execute(query, [email]);
         return rows[0];
     } catch (error) {
         handleDbError(error);
@@ -13,7 +13,7 @@ exports.findUserByEmail = async (connection, email) => {
 exports.findUserByUserName = async (connection, userName) => {
     try {
         const query = `SELECT * FROM users WHERE username = ? AND deleted_at IS NULL`;
-        const [rows] = await connection.query(query, [userName]);
+        const [rows] = await connection.execute(query, [userName]);
         return rows[0];
     } catch (error) {
         handleDbError(error);
@@ -38,7 +38,7 @@ exports.updateRefreshToken = async(connection, userId, refreshToken) => {
 exports.findUserById = async (connection, userId) => {
     try {
         const query = `SELECT * FROM users WHERE id = ? AND deleted_at IS NULL`;
-        const [rows] = await connection.query(query, [userId]);
+        const [rows] = await connection.execute(query, [userId]);
         return rows[0];
     } catch (error) {
         handleDbError(error);
@@ -57,7 +57,7 @@ exports.removeRefreshToken = async (connection, userId) => {
 exports.deleteUser = async (connection, userId) => {
     try {
         const query = `UPDATE users SET deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL`;
-        await connection.query(query, [userId]);
+        await connection.execute(query, [userId]);
     } catch (error) {
         handleDbError(error);
     }
