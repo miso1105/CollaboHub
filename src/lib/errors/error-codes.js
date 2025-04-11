@@ -1,8 +1,8 @@
-module.exports = {
-    UNATHORIZED: {
+exports.ERROR_CODES = {
+    UNAUTHORIZED: {
         status: 401,
         message: '인증이 필요합니다.',
-        code: 'ERR_UNATHORIZED',
+        code: 'ERR_UNAUTHORIZED',
     }, 
     FORBIDDEN: {
         status: 403,
@@ -27,7 +27,7 @@ module.exports = {
     INTERNAL_SERVER_ERROR: {
         status: 500,
         message: '서버 내부 오류',
-        code: 'ERR_INTERNER_SERVER',
+        code: 'ERR_INTERNAL_SERVER',
     },
     DB_CONNECTION_ERROR: {
         status: 503,

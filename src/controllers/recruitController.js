@@ -1,4 +1,5 @@
-const { RecruitRequestDTO, RecruitResponseDTO } = require('../dtos/recruit');
+const RecruitRequestDTO = require('../dtos/recruit/RecruitRequestDTO');
+const RecruitResponseDTO = require('../dtos/recruit/RecruitResponseDTO');
 const { createRecruit: createRecruitService, getRecruitById: getRecruitByIdService, getRecruits: getRecruitsService, getMyRecruits: getMyRecruitsService, updateRecruit: updateRecruitService, deleteRecruit: deleteRecruitService } = require('../services/recruitService');
 const { asyncHandler } = require('../lib/utils/express/asyncHandler');
 

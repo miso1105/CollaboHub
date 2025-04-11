@@ -4,10 +4,10 @@ dotenv.config();
 class CustomError extends Error {
     constructor(errorCodeObject, customMessage, originalError) {
         const isProd = process.env.NODE_ENV === 'production';
-        const safeMessage = isProd ? '에러가 발생했습니다.' : customMessage || errorCodeObject.message;
+        const safeMessage = isProd ? '에러가 발생했습니다.' : customMessage || errorCodeObject.message || '에러 메시지가 없습니다.';
         super(safeMessage);
-        this.status = errorCodeObject.status;
-        this.code = errorCodeObject.code;
+        this.status = errorCodeObject.status || 500;
+        this.code = errorCodeObject.code || 'ERR_UNKNOWN';
         this.original = originalError;
     }
 

@@ -1,4 +1,4 @@
-const { ERROR_CODES } = require('../lib/errors');
+const { ERROR_CODES } = require("../lib/errors/error-codes");
 
 exports.errorHandler = (err, req, res, next) => {
     const status = err.status || ERROR_CODES.INTERNAL_SERVER_ERROR.status;
@@ -9,7 +9,7 @@ exports.errorHandler = (err, req, res, next) => {
     if (typeof err.toJson === 'function') {
         return res.status(status).json(err.toJson());
     }
-
+    console.error(err, err.stack);
     return res.status(status).json({
         message,
         code,

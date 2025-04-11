@@ -1,8 +1,9 @@
 const { findUserByEmail, findUserByUserName, createUser: createUserRepo, updateRefreshToken, findUserById, removeRefreshToken: removeRefreshTokenRepo, deleteUser: deleteUserRepo } = require('../repositories/authReository');
 const bcrypt = require('bcrypt');
 const { generateAccessToken, generateRefreshToken } = require('../config/jwt');
-const { UserResponseDTO } = require('../dtos/auth');
-const { ERROR_CODES, CustomError } = require('../lib/errors');
+const UserResponseDTO = require('../dtos/auth/UserResponseDTO');
+const CustomError = require('../lib/errors/CustomError');
+const { ERROR_CODES } = require('../lib/errors/error-codes');
 const { validateEmail, validatePassword } = require('../lib/utils/validation/validateRequest');
 const { withTransaction } = require('../lib/utils/service/withTransaction');
 

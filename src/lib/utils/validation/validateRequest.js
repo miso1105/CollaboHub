@@ -1,4 +1,5 @@
-const { CustomError, ERROR_CODES } = require("../../errors");
+const CustomError = require("../../errors/CustomError");
+const { ERROR_CODES } = require("../../errors/error-codes");
 
 exports.validateEmail = (email) => {
     const regex = /^[\w.-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;

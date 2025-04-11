@@ -9,7 +9,8 @@ exports.withTransaction = async (callback) => {
         return result;
     } catch (error) {
         await connection.rollback();
-        throw error; 
+        console.error('트랜잭션 실패:', error);
+        throw error;
     } finally {
         connection.release();
     }

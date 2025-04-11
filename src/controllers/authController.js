@@ -1,4 +1,5 @@
-const { JoinRequestDTO, LoginRequestDTO } = require('../dtos/auth');
+const JoinRequestDTO = require('../dtos/auth/JoinRequestDTO');
+const LoginRequestDTO = require('../dtos/auth/LoginRequestDTO');
 const { asyncHandler } = require('../lib/utils/express/asyncHandler');
 const { createUser, getUserByEmail, reissueAccessToken: reissueAccessTokenService, removeRefreshToken, deleteUser: deleteUserService } = require('../services/authService');
 
