@@ -1,6 +1,7 @@
-const { RecruitResponseDTO } = require("../dtos/recruit")
+const RecruitResponseDTO = require('../dtos/recruit/RecruitResponseDTO');
 const { createRecruit: createRecruitRepo, findRecruitById, getAllRecruits, getMyRecruits: getMyRecruitsRepo, updateRecruit: updateRecruitRepo, deleteRecruit: deleteRecruitRepo } = require('../repositories/recruitRepository');
-const { ERROR_CODES, CustomError } = require('../lib/errors');
+const CustomError = require('../lib/errors/CustomError');
+const { ERROR_CODES } = require('../lib/errors/error-codes');
 const { validateUser } = require('../lib/utils/validation/validateUser');
 const { withTransaction } = require('../lib/utils/service/withTransaction');
 

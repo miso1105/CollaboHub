@@ -1,5 +1,6 @@
 const { findUserById } = require("../../../repositories/authReository");
-const { CustomError, ERROR_CODES } = require('../../errors');
+const CustomError = require("../../errors/CustomError");
+const { ERROR_CODES } = require("../../errors/error-codes");
 
 exports.validateUser = async (connection, userId) => {
     const user = await findUserById(connection, userId);

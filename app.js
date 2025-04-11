@@ -8,6 +8,7 @@ const cookiParser = require('cookie-parser');
 
 const authRouter = require('./src/routes/auth');
 const recruitRouter = require('./src/routes/recruit');
+const commentRouter = require('./src/routes/comment');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 });
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/recruits', recruitRouter);
+app.use('/api/v1/comments', commentRouter);
 
 app.use(routerNotFound);
 app.use(errorHandler);
