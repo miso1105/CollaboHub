@@ -36,3 +36,8 @@ exports.deleteUser = async (connection, userId) => {
     const query = `UPDATE users SET deleted_at = NOW() WHERE id = ? AND deleted_at IS NULL`;
     await connection.execute(query, [userId]);
 };
+ 
+exports.updateUserRole = async(connection, userId, role) => {
+    const query = `UPDATE users SET role = ? WHERE id = ?`;
+    await connection.execute(query, [role, userId]);
+};

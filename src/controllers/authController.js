@@ -1,5 +1,7 @@
 const JoinRequestDTO = require('../dtos/auth/JoinRequestDTO');
 const LoginRequestDTO = require('../dtos/auth/LoginRequestDTO');
+const CustomError = require('../lib/errors/CustomError');
+const { ERROR_CODES } = require('../lib/errors/error-codes');
 const { asyncHandler } = require('../lib/utils/express/asyncHandler');
 const { createUser, getUserByEmail, reissueAccessToken: reissueAccessTokenService, removeRefreshToken, deleteUser: deleteUserService } = require('../services/authService');
 

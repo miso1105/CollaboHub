@@ -8,7 +8,11 @@ exports.createRecruit = asyncHandler(async (req, res, next) => {
     const requestDto = new RecruitRequestDTO(req.body);
     const userId = req.user.id;
     const responseDto = await createRecruitService(requestDto, userId);
-    return res.status(201).json(responseDto.toJson());
+    return res.status(201).json({
+        response: responseDto.toJson(),
+        roleUpdated: true,
+
+    });
 });
 
 // 모집 공고 단일 조회 컨트롤러 
@@ -50,8 +54,9 @@ exports.updateRecruit = asyncHandler(async (req, res, next) => {
 exports.deleteRecruit = asyncHandler(async (req, res, next) => {
     const userId = req.user.id;
     const recruitId = req.params.id;
-    await deleteRecruitService(userId, recruitId);
+    const roleValue = await deleteRecruitService(userId, recruitId);
     return res.status(200).json({
-        deletedRecruitId: recruitId
+        deletedRecruitId: recruitId,
+        roleUpdated: roleValue,
     });
 });

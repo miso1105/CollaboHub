@@ -65,7 +65,7 @@ exports.getUserByEmail = async (dto) => {
 exports.reissueAccessToken = async (userId, refreshToken) => {
     return withTransaction(async (connection) => {
         if (!refreshToken) {
-            throw new CustomError(ERROR_CODES.UNATHORIZED, '리프레시 토큰이 없습니다.');
+            throw new CustomError(ERROR_CODES.UNATHORIZED, '리프레시 토큰이 없습니다. 다시 로그인 해주세요.');
         }
         const user = await findUserById(connection, userId);
         if (!user) {
