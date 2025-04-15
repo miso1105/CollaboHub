@@ -10,6 +10,7 @@ const authRouter = require('./src/routes/auth');
 const recruitRouter = require('./src/routes/recruit');
 const commentRouter = require('./src/routes/comment');
 const projectRouter = require('./src/routes/project');
+const projectInvitesRouter = require('./src/routes/projectInvites');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -31,6 +32,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/recruits', recruitRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/projects', projectRouter);
+app.use('/api/v1/project-invites', projectInvitesRouter);
 
 app.use(routerNotFound);
 app.use(errorHandler);

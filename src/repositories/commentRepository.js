@@ -1,5 +1,3 @@
-// const { handleDbError } = require('../lib/utils/db/handleDbError');
-
 exports.createComment = async (connection, content, parentId, userId, recruitId) => {
     const query = `INSERT INTO comments (content, parent_comment_id, commenter_id, recruitment_id) VALUES (?, ?, ?, ?)`;
     const [result] = await connection.execute(query, [content, parentId, userId, recruitId]);
@@ -38,4 +36,10 @@ exports.updateComment = async (connection, content, commentId) => {
 exports.deleteComment = async(connection, userId, commentId) => {
     const query = `DELETE FROM comments WHERE commenter_id = ? AND id = ?`;
     await connection.execute(query, [userId, commentId]);
+};
+
+exports.hasUserCommentedOnRecruit = async (connection, recruitId, commenterId) => {
+    const query = `SELECT 1 FROM comments WHERE recruitment_id = ? AND commenter_id = ? LIMIT 1`;
+    const [rows] = await connection.execute(query, [recruitId, commenterId]);
+    return rows.length > 0; 
 };

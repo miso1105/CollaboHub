@@ -7,4 +7,5 @@ exports.validateRecruit = async (connection, recruitId) => {
     if (!recruit) {
         throw new CustomError(ERROR_CODES.NOT_FOUND, '해당 모집 공고를 찾을 수 없습니다.');
     }
+    return recruit;
 }
