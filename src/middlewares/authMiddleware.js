@@ -1,6 +1,10 @@
 const CustomError = require('../lib/errors/CustomError');
 const { ERROR_CODES } = require('../lib/errors/error-codes');
 const { getAccessTokenPayload, getRefreshTokenPayload } = require('../config/jwt');
+const { validateProject } = require('../lib/utils/validation/validateProject');
+const getConnection = require('../config/db');
+const { validateUser } = require('../lib/utils/validation/validateUser');
+const { findCollaboratorByUserIdAndProjectId } = require('../repositories/collaboratorRepository');
 
 // access token 검증 후 인증시에 사용할 유저 정보 넣어줌    
 exports.verifyAccessToken = (req, res, next) => {
@@ -49,5 +53,28 @@ exports.verifyLeader = (req, res, next) => {
         next();
     } catch (error) {
         next(error);
+    }
+};
+
+// 프로젝트에 참여 중인 유저인지 검증 
+exports.verifyCollaborator = async (req, res, next) => {
+    const connection = await getConnection();
+    try {
+        await connection.beginTransaction();
+        const projectId = req.params.projectId;
+        const userId = req.user.id;
+        await validateProject(connection, projectId);
+        await validateUser(connection, userId);
+        const result = await findCollaboratorByUserIdAndProjectId(connection, userId, projectId);
+        if (result.length === 0) {
+            throw new CustomError(ERROR_CODES.FORBIDDEN, '해당 프로젝트에 참여 중인 멤버가 아닙니다.');
+        }
+        await connection.commit();
+        next();
+    } catch (error) {
+        await connection.rollback();
+        next(error);
+    } finally {
+        connection.release();
     }
 };
