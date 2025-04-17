@@ -11,6 +11,7 @@ const recruitRouter = require('./src/routes/recruit');
 const commentRouter = require('./src/routes/comment');
 const projectRouter = require('./src/routes/project');
 const projectInvitesRouter = require('./src/routes/projectInvites');
+const taskRouter = require('./src/routes/task');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -33,6 +34,7 @@ app.use('/api/v1/recruits', recruitRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/project-invites', projectInvitesRouter);
+app.use('/api/v1/projects/:projectId/tasks', taskRouter);
 
 app.use(routerNotFound);
 app.use(errorHandler);
