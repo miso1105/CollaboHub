@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/join', joinUser);
-router.get('/login', login);
+router.post('/login', login);
 router.post('/logout', verifyAccessToken, logout);
 router.post('/reissue', verifyRefreshToken, reissueAccessToken);
 router.delete('/withdraw', verifyAccessToken, deleteUser);

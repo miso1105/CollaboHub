@@ -78,3 +78,14 @@ exports.verifyCollaborator = async (req, res, next) => {
         connection.release();
     }
 };
+
+exports.csrfProtection = (req, res, next) => {
+    const csrfTokenInCookie = req.cookies.csrfToken;
+    const csrfTokenInHeader = req.headers['x-csrf-token'];
+
+    if (!csrfTokenInCookie || !csrfTokenInHeader || csrfTokenInCookie !== csrfTokenInHeader) {
+        return res.status(403).json({message: 'CSRF 토큰 검증 실패, 차단'});
+    }
+    
+    next();
+}

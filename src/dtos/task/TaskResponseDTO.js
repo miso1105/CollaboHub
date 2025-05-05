@@ -1,6 +1,3 @@
-const CustomError = require("../../lib/errors/CustomError");
-const { ERROR_CODES } = require("../../lib/errors/error-codes");
-
 class TaskResponseDTO {
     constructor(task) {
         this.id = task.id;
@@ -26,7 +23,7 @@ class TaskResponseDTO {
     }
     
     static fromList(tasks) {
-        return tasks.map(t => new TaskResponseDTO(t))
+        return tasks.map(t => new TaskResponseDTO(t));
     }
 }
 module.exports = TaskResponseDTO;

@@ -1,9 +1,8 @@
 const JoinRequestDTO = require('../dtos/auth/JoinRequestDTO');
 const LoginRequestDTO = require('../dtos/auth/LoginRequestDTO');
-const CustomError = require('../lib/errors/CustomError');
-const { ERROR_CODES } = require('../lib/errors/error-codes');
 const { asyncHandler } = require('../lib/utils/express/asyncHandler');
 const { createUser, getUserByEmail, reissueAccessToken: reissueAccessTokenService, removeRefreshToken, deleteUser: deleteUserService } = require('../services/authService');
+const { generateCsrfToken } = require('../lib/utils/express/csrf');
 
 // 회원가입 컨트롤러 
 exports.joinUser = asyncHandler(async (req, res, next) => {
@@ -18,17 +17,29 @@ exports.login =  asyncHandler(async (req, res, next) => {
     const { userResponse, accessToken, refreshToken } = await getUserByEmail(loginDto);
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: false,
+        secure: false,  
+        sameSite: 'Lax',
         maxAge: parseInt(process.env.JWT_COOKIE_EXPIRES_IN_MS), 
     })
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: false,
+        sameSite: 'Lax',
         maxAge: parseInt(process.env.JWT_REFRESH_COOKIE_EXPIRES_MS),
     });
+
+    const csrfToken = generateCsrfToken();
+    res.cookie('csrfToken', csrfToken, {
+        httpOnly: false,
+        secure: false,
+        sameSite: 'Lax',
+        maxAge: parseInt(process.env.JWT_COOKIE_EXPIRES_IN_MS),
+    }); 
+
     return res.status(200).json({
         user: userResponse.toJson(), 
-        accessToken 
+        accessToken,
+        csrfToken
     });
 });
 
@@ -38,6 +49,7 @@ exports.reissueAccessToken =  asyncHandler(async (req, res, next) => {
     res.cookie('accessToken', newAccessToken, {
         httpOnly: true,
         secure: false,
+        sameSite: 'Lax',
         maxAge: parseInt(process.env.JWT_COOKIE_EXPIRES_IN_MS),
     });
     
@@ -61,3 +73,12 @@ exports.deleteUser =  asyncHandler(async (req, res, next) => {
     const userResponse = await deleteUserService(req.user.id);
     return res.status(200).json(userResponse.toJson());
 });
+
+// 로그인 화면 렌더링 
+exports.renderLogin = (req, res, next) => {
+    try {
+        res.render('login'); 
+    } catch (error) {
+        next(error);
+    };
+};

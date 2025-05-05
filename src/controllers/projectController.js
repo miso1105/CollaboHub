@@ -1,7 +1,7 @@
 const ProjectRequestDTO = require("../dtos/project/ProjectRequestDTO");
 const ProjectResponseDTO = require("../dtos/project/ProjectResponseDTO");
 const { asyncHandler } = require("../lib/utils/express/asyncHandler");
-const { createProject: createProjectService, getAllProjects: getAllProjectsService, getMyProjects: getMyProjectsService, getProjectById: getProjectByIdService, updateProject: updateProjectService, deleteProject: deleteProjectService } = require('../services/projectService');
+const { createProject: createProjectService, getAllProjects: getAllProjectsService, getMyProjects: getMyProjectsService, getProjectById: getProjectByIdService, updateProject: updateProjectService, deleteProject: deleteProjectService, getInvitedProjects: getInvitedProjectsService } = require('../services/projectService');
 
 // 프로젝트 생성 컨트롤러
 exports.createProject = asyncHandler(async (req, res, next) => {
@@ -52,4 +52,12 @@ exports.deleteProject = asyncHandler(async (req, res, next) => {
     return res.status(200).json({
         deletedProjectId: projectId,
     });
+});
+
+// 유저가 참여중인 프로젝트 목록 조회 후 목록 화면 렌더링 
+exports.getInvitedProjects = asyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
+    const invitedProjects = await getInvitedProjectsService(userId);
+
+    res.render('myChats', { invitedProjects });
 });

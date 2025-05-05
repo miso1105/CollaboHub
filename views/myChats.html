@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>내 채팅방 목록</title>
+    </head>
+    <body>
+        <h1>초대받은 프로젝트 채팅방</h1>
+        <ul>
+            {% for invitedProject in invitedProjects %} 
+                <li>
+                    {{invitedProject.project_name}}
+                    <button onclick="enterChat('{{ invitedProject.id }}')">입장</button>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <script>
+            function enterChat(projectId) {
+                console.log('myChats.html 안에 있는 projectId!!:', projectId); 
+                window.location.href = `/projects/${projectId}/chat`;  // chat.html 렌더링 
+            }
+        </script>
+    </body>
+</html>

@@ -7,7 +7,7 @@ const { validateDate } = require('../lib/utils/validation/validateRequest');
 const { validateUser } = require('../lib/utils/validation/validateUser');
 const { validateRecruit } = require('../lib/utils/validation/validateRecruit');
 const { updateRecruitmentProjectId } = require('../repositories/recruitRepository');
-const { createProject: createProjectRepo, getAllProjects: getAllProjectsRepo, getMyProjects: getMyProjectsRepo, getProjectById: getProjectByIdRepo, updateProject: updateProjectRepo, deleteProject: deleteProjectRepo } = require('../repositories/projectRepository');
+const { createProject: createProjectRepo, getAllProjects: getAllProjectsRepo, getMyProjects: getMyProjectsRepo, getProjectById: getProjectByIdRepo, updateProject: updateProjectRepo, deleteProject: deleteProjectRepo, getInvitedProjects: getInvitedProjectsRepo } = require('../repositories/projectRepository');
 const { createCollaborators } = require('../repositories/collaboratorRepository');
 
 exports.createProject = async(dto, userId) => {
@@ -33,6 +33,8 @@ exports.createProject = async(dto, userId) => {
             throw new CustomError(ERROR_CODES.FORBIDDEN, '본인이 작성한 공고와 본인이 작성한 프로젝트만 연결할 수 있습니다.');
         }
         await updateRecruitmentProjectId(connection, recruitId, project.id);
+
+        // 프로젝트 내 그룹 채팅방은 projectId 기준으로 클라이언트의 소켓 연결 시 자동 생성됩니다. 
 
         const responseDto = new ProjectResponseDTO(project);
         return responseDto;
@@ -75,3 +77,12 @@ exports.deleteProject = async(projectId, userId) => {
         await deleteProjectRepo(connection, projectId, userId)
     });
 };
+
+exports.getInvitedProjects = async(userId) => {
+    return withTransaction(async (connection) => {
+        await validateUser(connection, userId);
+
+        const invitedProjects = await getInvitedProjectsRepo(connection, userId)
+        return invitedProjects; 
+    });
+}
