@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 채팅</title>
+</head>
+<body>
+    <h1>프로젝트 {{ projectId }}번 채팅방에 오신 걸 환영합니다!</h1>
+
+    <!-- 채팅 박스 -->
+    <div id="chat-box" style="height: 300px; overflow-y: auto; border:1px solid #ccc;"></div>
+
+    <!-- 채팅 입력 폼 -->
+    <form id="chat-form">
+        <input type="text" id="chat-input" placeholder="메시지 입력">
+        <button type="submit">전송</button>
+    </form>
+    
+    <!-- axios 먼저 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- csrf 토큰을 헤더에 넣어줌 -->
+    <script src="/js/axiosInterceptor.js"></script>
+    <!-- socket.io 클라이언트 -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- 내 클라이언트 코드 -->
+    <script src="/js/socketClient.js"></script>
+</body>
+</html>
