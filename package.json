@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/miso1105/CollaboHub#readme",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.804.0",
     "bcrypt": "^5.1.1",
     "connect-redis": "^8.0.2",
     "cookie-parser": "^1.4.7",
@@ -27,9 +28,12 @@
     "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
+    "multer-s3": "^3.0.1",
     "mysql2": "^3.14.0",
     "nunjucks": "^3.2.4",
     "redis": "^4.7.0",
+    "sharp": "^0.34.1",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {

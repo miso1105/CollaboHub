@@ -5,6 +5,7 @@ class ProjectChatResponseDTO {
         this.senderId = projectChat.sender_id;
         this.message = projectChat.message;
         this.createdAt = projectChat.created_at;
+        this.imageUrls = projectChat.image_urls ? JSON.parse(projectChat.image_urls) : [];
     }
     toJson () {
         return {
@@ -12,7 +13,8 @@ class ProjectChatResponseDTO {
             projectId: this.projectId,
             senderId: this.senderId,
             message: this.message,
-            createdAt: this.createdAt
+            createdAt: this.createdAt,
+            imageUrls: this.imageUrls,
         }
     }
 
