@@ -33,13 +33,14 @@ module.exports = (server, app) => {
         // 채팅 메시지 수신 및 저장 처리 - 클라이언트에서 chat 이벤트 수신 -> DB 저장 후 프로젝트 방에 메시지 브로드캐스트 
         socket.on('chat', async (data) => {  
             try {
-                const savedProjectChat = await sendProjectChatService({ message: data.message }, projectId, socket.request.user.id); 
+                const savedProjectChat = await sendProjectChatService({ message: data.message, imageUrls: data.imageUrls }, projectId, socket.request.user.id); 
                 
-                // 저장된 메시지 같은 방 참여자에게 전송  
+                // 저장된 메시지 같은 방 참여자에게 전송(브로드캐스트) 
                 chat.to(projectRoom).emit('chat', {
                     userId: savedProjectChat.sender_id,    
                     message: savedProjectChat.message,
-                    chatId: savedProjectChat.id 
+                    chatId: savedProjectChat.id ,
+                    imageUrls: savedProjectChat.image_urls ? JSON.parse(savedProjectChat.image_urls) : [] 
                 }); 
         } catch (error) {
             console.error('소켓 채팅 전송 실패', error);

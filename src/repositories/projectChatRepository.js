@@ -1,6 +1,6 @@
-exports.createProjectChat = async (connection, message, projectId, userId) => {
-    const query = `INSERT INTO project_chats (project_id, sender_id, message) VALUES (?, ?, ?)`;
-    const [result] = await connection.execute(query, [projectId, userId, message]);
+exports.createProjectChat = async (connection, message, projectId, userId, imageUrls) => {
+    const query = `INSERT INTO project_chats (project_id, sender_id, message, image_urls) VALUES (?, ?, ?, ?)`;
+    const [result] = await connection.execute(query, [projectId, userId, message, imageUrls]);
     const insertId = result.insertId;
     const findprojectChatQuery = `SELECT * FROM project_chats WHERE id = ?`;
     const [rows] = await connection.execute(findprojectChatQuery, [insertId]);

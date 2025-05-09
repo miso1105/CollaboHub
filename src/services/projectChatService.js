@@ -9,16 +9,6 @@ const { validateUser } = require('../lib/utils/validation/validateUser');
 
 const { createProjectChat, deleteMyChat: deleteMyChatRepo, getChatHistory: getChatHistoryRepo } = require('../repositories/projectChatRepository');
 
-// // 채팅방 입장 검증 
-// router.get('/enter', verifyAccessToken, verifyCollaborator, enterProjectChat);  
-// // 채팅 전송 
-// router.post('/', verifyAccessToken, verifyCollaborator, sendProjectChat);      
-// // 본인 채팅 삭제  
-// router.delete('/:chatId', verifyAccessToken, verifyCollaborator, deleteMyChat); 
-// // 채팅 목록 조회 
-// router.get('/', verifyAccessToken, verifyCollaborator, getChatHistory);  
-
-
 // [GET] 채팅 입장을 위한 검증 
 exports.enterProjectChat = async (projectId, userId) => {
     return withTransaction(async (connection) => {
@@ -31,15 +21,17 @@ exports.enterProjectChat = async (projectId, userId) => {
 // [POST] 협업 중인 멤버들에게 채팅 전송 
 exports.sendProjectChat = async (requestDto, projectId, userId) => {
     return withTransaction(async (connection) => {
-        const { message } = requestDto;
+        const { message, imageUrls } = requestDto;
 
-        if (!message) {
+        if (!message && !imageUrls) {
             throw new CustomError(ERROR_CODES.BAD_REQUEST, '메시지를 입력해주세요.');
         };
         await validateProject(connection, projectId);
         await validateUser(connection, userId);
 
-        const savedProjectChat = await createProjectChat(connection, message, projectId, userId);
+        const savedProjectChat = await createProjectChat(
+            connection, message, projectId, userId, imageUrls ? JSON.stringify(imageUrls) : null
+        );
         return savedProjectChat;
     });
 };
@@ -55,11 +47,11 @@ exports.deleteMyChat = async (projectId, chatId, userId) => {
     });
 };
 
-// [GET] 참여 프로젝트 목록 조회 
+// [GET] 참여 프로젝트 채팅 목록 조회  
 exports.getChatHistory = async (projectId, safeLimit, beforeId) => {
     return withTransaction(async (connection) => {
         await validateProject(connection, projectId);
-
+        
         const projectChats = await getChatHistoryRepo(connection, projectId, safeLimit, beforeId);
         return projectChats;
     });

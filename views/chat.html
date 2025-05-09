@@ -13,16 +13,19 @@
     <!-- 채팅 입력 폼 -->
     <form id="chat-form">
         <input type="text" id="chat-input" placeholder="메시지 입력">
+        <label for="chat-image">파일 선택</label>
+        <input type="file" id="chat-image" accept="image/*" multiple style="margin-left: 10px;">
+        <small style="color: #666; margin-left: 4px;">(최대 5장)</small>
         <button type="submit">전송</button>
     </form>
     
-    <!-- axios 먼저 -->
+    <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- csrf 토큰을 헤더에 넣어줌 -->
     <script src="/js/axiosInterceptor.js"></script>
     <!-- socket.io 클라이언트 -->
     <script src="/socket.io/socket.io.js"></script>
-    <!-- 내 클라이언트 코드 -->
+    <!-- 클라이언트 코드 -->
     <script src="/js/socketClient.js"></script>
 </body>
 </html>

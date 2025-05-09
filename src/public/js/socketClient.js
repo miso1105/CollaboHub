@@ -31,6 +31,17 @@ function renderChatMessage(data, currentUser, prepend = false) {
     
     messageDiv.classList.add('chat-message'); 
 
+    // 업로드 순서대로 이미지 렌더링
+    const urls = Array.isArray(data.imageUrls) ? data.imageUrls : [];
+    if (urls) {
+        urls.forEach(url => {
+            const image = document.createElement('img');
+            image.src = url;
+            image.style.maxWidth = '200px';
+            messageDiv.appendChild(image);
+        });
+    }
+
     // 본인 메시지에만 삭제 버튼 렌더링 
     if (data.userId && currentUser && String(data.userId) === String(currentUser) && !isTemp) { 
         
@@ -72,7 +83,7 @@ async function initChat() {
 
         // 초기 채팅 100개 로드 
         const res = await axios.get(`/api/v1/projects/${projectId}/chats?limit=100`);
-        const projectChats = res.data; 
+        const projectChatResponses = res.data; 
 
          // 소켓 연결 및 인증 정보 전송
         socket = io('/project-chat', {    
@@ -86,16 +97,17 @@ async function initChat() {
         socket.on('connect', () => {
             console.log('소켓 연결 성공:', socket.id);
 
-            projectChats.forEach(projectChat => {
+            projectChatResponses.forEach(projectChat => {
                 renderChatMessage({      
                     chatId: projectChat.id,
                     userId: projectChat.senderId,
-                    message: projectChat.message
-                }, currentUser) 
+                    message: projectChat.message,
+                    imageUrls: Array.isArray(projectChat.imageUrls) ? projectChat.imageUrls : [] 
+                }, currentUser);
             });
             
-            if (projectChats.length > 0) {
-                lastChatId = projectChats[projectChats.length - 1].id; 
+            if (projectChatResponses.length > 0) {
+                lastChatId = projectChatResponses[projectChatResponses.length - 1].id; 
     
             // 입장 알림 메시지 렌더링 
             socket.on('join', (data) => {
@@ -107,7 +119,7 @@ async function initChat() {
         }
     });   
     
-        // 채팅 수신 이벤트 처리 
+        // 서버에서 온 채팅 수신 이벤트 처리 
         socket.on('chat', (data) => {
             try { 
                 // 채팅 렌더링 중복 방지 
@@ -131,24 +143,54 @@ async function initChat() {
         document.getElementById('chat-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const input = document.getElementById('chat-input');
+            const imageInput = document.getElementById('chat-image');
             const message = input.value.trim();
+            let imageUrls = []; 
 
-            if (!message) return;
+            // 5장 초과 시 alert 
+            if (imageInput.files.length > 5) {
+                alert('이미지는 최대 5장까지만 업로드할 수 있습니다.');
+                return;
+            }
 
-            // optimistic UI - 임시 메시지 먼저 화면에 렌더링 
+            // 메시지와 이미지 둘 다 비어 있으면 return 
+            if (!message && imageInput.files.length === 0) return;
+
+            // optimistic UI - 임시 메시지 먼저 화면에 렌더링 / 이미지 없이 텍스트만 먼저 띄워주기
             renderChatMessage({
                 chatId: `temp-${Date.now()}`, 
                 userId: currentUser,
-                message
-            }, currentUser)
+                message,
+                imageUrls: []  
+            }, currentUser);
 
+            // 이미지가 있다면 이미지 업로드  
+            if (imageInput.files.length > 0) {
+                const form = new FormData(); 
+                // 선택된 모든 파일을 images라는 필드로 append 
+                Array.from(imageInput.files).forEach(file =>
+                    form.append('images', file)
+                );
 
-            // 서버에 전송 
+                // 업로드 라우터 경로 - 응답 data는 서버에서 내려준 URL 문자열 배열(resizedKey URLs) 
+                const { data } = await axios.post(
+                    `/api/v1/projects/${projectId}/chats/upload`, 
+                    form, 
+                    { headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                
+                imageUrls = Array.isArray(data) ? data : []; 
+            }
+
+            // 서버에 전송 - 소켓으로 메시지 + 이미지 URL 한 번에 전송
             socket.emit('chat', { 
                 message, 
-                userId: currentUser 
+                userId: currentUser,
+                imageUrls    
             }); 
+            // 전송 후 입력 초기화 
             input.value = '';
+            imageInput.value = '';
         });
 
         // 과거 채팅 무한스크롤 로딩 
@@ -158,20 +200,21 @@ async function initChat() {
                     const res = await axios.get(`/api/v1/projects/${projectId}/chats`, {
                         params: { limit: 100, beforeId: lastChatId }
                     });
-                    const oldProjectChats = res.data;
+                    const oldProjectChatResponses = res.data;
 
-                    oldProjectChats.forEach(oldProjectChat => {
+                    oldProjectChatResponses.forEach(oldProjectChat => {
                         if (renderChatIds.has(oldProjectChat.id)) return;  
                         renderChatIds.add(oldProjectChat.id);              
 
                         renderChatMessage({                
                             chatId: oldProjectChat.id,
                             userId: oldProjectChat.senderId,
-                            message: oldProjectChat.message
+                            message: oldProjectChat.message,
+                            imageUrls: Array.isArray(oldProjectChat.imageUrls) ? oldProjectChat.imageUrls : [] 
                     }, currentUser, true)});
 
-                    if (oldProjectChats.length > 0) {
-                        lastChatId = oldProjectChats[oldProjectChats.length - 1].id;
+                    if (oldProjectChatResponses.length > 0) {
+                        lastChatId = oldProjectChatResponses[oldProjectChatResponses.length - 1].id;
                     } else {
                         console.log('더 이상 채팅을 불러올 수 없습니다.');
                     }
