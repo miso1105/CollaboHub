@@ -20,6 +20,8 @@ async function uploadSingle(fileBuffer, fileName, mimeType) {
         // Sharp로 원본 이미지 리사이징
         const resizedBuffer = await sharp(fileBuffer) 
             .toFormat('jpeg')
+            .resize({ width: 200 })
+            .withMetadata({ exif: false })
             .jpeg({ quality: 80 })
             .toBuffer();
 
