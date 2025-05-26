@@ -18,7 +18,7 @@ const viewsRouter = require('./src/routes/viewsRouter');
 const { csrfProtection } = require('./src/middlewares/authMiddleware');
 
 const app = express();
-app.set('port', process.env.PORT || 8001);
+app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
     express: app,
