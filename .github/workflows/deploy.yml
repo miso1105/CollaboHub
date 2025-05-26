@@ -49,16 +49,16 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          envs: CI_CD_GITHUB_TOKEN=${{ secrets.CI_CD_GITHUB_TOKEN }}
+          envs: CI_CD_GHB_TOKEN=${{ secrets.CI_CD_GHB_TOKEN }}
           script: |
             echo "현재 위치: $(pwd)"
-            echo "토큰 앞 4글자: ${CI_CD_GITHUB_TOKEN:0:4}"
+            echo "토큰 앞 4글자: ${CI_CD_GHB_TOKEN:0:4}"
 
             cd ~
             echo "홈 디렉토리로 cd ~ 이동 후 현재 위치: $(pwd)"
 
             if [ ! -d collabohub ]; then
-                git clone https://${CI_CD_GITHUB_TOKEN}@github.com/miso1105/CollaboHub.git collabohub
+                git clone https://x-access-token:${CI_CD_GHB_TOKEN}@github.com/miso1105/CollaboHub.git collabohub
               fi
 
             cd collabohub
