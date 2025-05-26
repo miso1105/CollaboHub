@@ -49,9 +49,19 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script_stop: true
           script: |
-            cd ~/collabohub
+            echo "현재 위치: $(pwd)"
+            
+            cd ~
+            echo "홈 디렉토리로 cd ~ 이동 후 현재 위치: $(pwd)"
+
+            if [ ! -d collabohub ]; then
+                git clone https://github.com/miso1105/CollaboHub.git collabohub
+              fi
+
+            cd collabohub
+            echo "프로젝트 디렉토리로 cd collabohub 이동 후 현재위치: $(pwd)"
+
             docker compose pull collabohub-server
             docker compose down
             docker compose up -d     
