@@ -49,7 +49,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          env: CI_CD_GITHUB_TOKEN=${{ secrets.CI_CD_GITHUB_TOKEN }}
+          envs: CI_CD_GITHUB_TOKEN=${{ secrets.CI_CD_GITHUB_TOKEN }}
           script: |
             echo "현재 위치: $(pwd)"
             echo "토큰 앞 4글자: ${CI_CD_GITHUB_TOKEN:0:4}"
