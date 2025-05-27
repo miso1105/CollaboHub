@@ -52,13 +52,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             export CI_CD_GHB_TOKEN=${{ secrets.CI_CD_GHB_TOKEN }}
-
-            echo "토큰 앞 4글자: ${CI_CD_GHB_TOKEN:0:4}"
-
-            echo "현재 위치: $(pwd)"
             
             cd ~
-            echo "홈 디렉토리로 cd ~ 이동 후 현재 위치: $(pwd)"
 
             if [ ! -d collabohub ]; then
                 git clone https://x-access-token:${CI_CD_GHB_TOKEN}@github.com/miso1105/CollaboHub.git collabohub
@@ -66,7 +61,9 @@ jobs:
 
             cd collabohub
             echo "${{ secrets.ENV }}" > .env
-            echo "프로젝트 디렉토리로 cd collabohub 이동 후 현재위치: $(pwd)"
+
+            echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .mysql.env
+            echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .mysql.env
 
             docker compose pull collabohub-server
             docker compose down
