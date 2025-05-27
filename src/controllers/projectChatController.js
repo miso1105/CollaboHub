@@ -1,5 +1,5 @@
 const { enterProjectChat: enterProjectChatService, sendProjectChat: sendProjectChatService, deleteMyChat: deleteMyChatService, getChatHistory: getChatHistoryService, getInvitedProjects: getInvitedProjectsService } = require('../services/projectChatService');
-const ProjectChatRequestDTO = require('../dtos/projectChat/projectChatRequestDTO');
+const ProjectChatRequestDTO = require('../dtos/projectChat/ProjectChatRequestDTO');
 const { asyncHandler } = require('../lib/utils/express/asyncHandler');
 const ProjectChatResponseDTO = require('../dtos/projectChat/ProjectChatResponseDTO');
 
