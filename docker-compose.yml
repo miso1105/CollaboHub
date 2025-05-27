@@ -3,6 +3,9 @@ services:
     image: 027136969532.dkr.ecr.ap-northeast-2.amazonaws.com/collabohub-server:latest
     env_file:
       - .env
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=123456
     ports: 
       - 3000:3000
     depends_on:
@@ -15,9 +18,9 @@ services:
   mysql-db:
     image: mysql
     env_file:
-      - .env
+      - .mysql.env
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     volumes:
       - ./mysql_data:/var/lib/mysql
