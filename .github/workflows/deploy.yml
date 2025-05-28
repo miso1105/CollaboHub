@@ -57,7 +57,9 @@ jobs:
 
             if [ ! -d collabohub ]; then
                 git clone https://x-access-token:${CI_CD_GHB_TOKEN}@github.com/miso1105/CollaboHub.git collabohub
-              fi
+            else   
+              cd collabohub && git pull origin main 
+            fi
 
             cd collabohub
             echo "${{ secrets.ENV }}" > .env
